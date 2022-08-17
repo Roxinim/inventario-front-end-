@@ -1,0 +1,33 @@
+.titulo{
+    font-size: 100px;
+    margin-bottom: 40px;
+}
+.logon-container{
+    /* background-color: yellow; */
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-around;
+}
+.form{
+    
+    /* background-color: aqua; */
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+
+}
+form{
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* justify-content: center; */
+    align-items: center;
+}
+img{
+    width: 100%;
+}
+.aviso1{
+    display: none;
+}

@@ -1,0 +1,33 @@
+.menu{
+    width: 20%;
+    height: 100vh;
+    background-color:  #1d1d1d;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.menu p{
+    color: whitesmoke;
+    text-align: center;
+    padding-bottom: 20px;
+   
+}
+.menu a{
+    font-size: 30px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    color: whitesmoke;
+    /* transition: color 0.2s; */
+}
+.menu a:hover{
+    color: aqua;
+}
+.menu a:focus{
+    color: aqua;
+}
+.menu h1{
+    color: aqua;
+    justify-content: center;
+}

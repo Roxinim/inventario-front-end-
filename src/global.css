@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    /* box-sizing: 0; */
+}
+body{
+    font: 400 20px "Roboto", sans-serif;
+    background-color: rgb(0, 255, 255);
+}
+form{
+    
+    margin: 0 auto;
+}
+input, button, textarea, select{
+    font: 400 25px "Roboto", sans-serif;
+    margin: 5px;
+    padding: 2px;
+    border-radius: 7px;
+    border: solid black;
+    /* width: 50%; */
+}
+button{
+    cursor: pointer ;
+    font-weight: 900;
+    transition: filter 0.2s;
+}
+button:hover{
+    filter:brightness(90%)
+}
+img{
+    width: 100%;
+}
+.dashboard-container{
+    display: flex;
+    height: vh;
+    overflow: "scroll container";
+}
+.principal{
+    width: 80%;
+
+    height: 100vh;
+    background-color: aqua;
+}
+h1{ text-align: center;
+    font-size: 60px;}
+table{
+   margin-left: auto;
+   margin-right: auto;
+   border-color: black;
+   padding: 3px;
+   border-collapse: collapse;
+}
+td{
+    padding-left: 5px;
+    padding-right: 5px;
+    margin: 0;
+}
+th{
+    padding: 5px;
+    font-size: xx-large;
+}
+tr{
+    margin: 0;
+}
+.btn{
+    cursor: pointer;
+}
+.cadastrar{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+.form-cadastro input{
+    width: 40vw;
+    /* transition: filter 0.5s; */
+    transition: background-color 0.3s;
+
+    
+}
+.form-cadastro input:focus{
+    /* background-color: whitesmoke; */
+    /* filter:brightness(90%); */
+
+    background-color: black;
+    color: white;
+    /* border-color: none; */
+}
+.form-cadastro select{
+    width: 41vw;
+    transition: background-color 0.3s;
+}
+.form-cadastro select:focus{
+    background-color: black;
+    color: white;
+}
+.form-cadastro button{
+    color: #1d1d1d;
+    background-color: greenyellow;
+    border: 0px;
+    margin-top: 20px;
+    margin-right: 40px;
+    align-self: end;
+    padding: 10px;
+    transition: box-shadow 0.2s;
+}
+.form-cadastro button:hover{
+    box-shadow:inset 0px 0px 0px 3px black;
+    /* border: 5px solid black; */
+}
+.form-cadastro button:focus{
+    box-shadow:inset 0px 0px 0px 3px black;
+    /* border: 5px solid black; */
+}
+.form-cadastro label{
+    align-self: flex-start;
+    font-size: 25px;
+    text-indent: 20px;
+    margin-bottom: -6px;
+}
+#logintitle{
+    margin-bottom: 5px;
+}

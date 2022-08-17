@@ -1,0 +1,30 @@
+.head{
+    text-align: center;
+    color: black;
+    background-color: whitesmoke;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    /* border-bottom: 5px solid black; */
+}
+h2{
+    font-size: 60px;
+}
+a{
+    text-decoration: none;
+}
+/* .logoff{
+    position: absolute;
+    right: 0;
+    padding-right: 25px;
+} */
+.buttons a{
+    margin-right: 15px;
+}
+.buttons{
+    position: absolute;
+    right: 0;
+    padding-right: 25px;
+}
