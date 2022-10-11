@@ -7,6 +7,7 @@ import {BiEditAlt} from "react-icons/bi"
 import {confirmAlert} from 'react-confirm-alert';
 import {FiFilePlus} from 'react-icons/fi'
 import '../../../components/head/react-confirm-alert.css'
+import api from '../../../server/api'
 export default function PatrimonyList(){
     const [dados, setDados] = useState([]);
     useEffect(()=>{
@@ -16,8 +17,15 @@ export default function PatrimonyList(){
         window.location.href=`/patrimony-edit/${i}`
     }
     function mostrarlista(){
-        let cadastros = JSON.parse(localStorage.getItem("cd-patrimonio")||"[]");;
-        setDados(cadastros);
+        api.get('/patrimonios')
+        .then(res=>{
+            if(res.status==200){
+                setDados(res.data.patrimonio);
+            } else{console.log("Houve um erro na requisição")}
+        })
+        .then((data)=>console.log(data));
+        // let cadastros = JSON.parse(localStorage.getItem("cd-patrimonio")||"[]");;
+        // setDados(cadastros);
     }
     function excluir(i, nome){
         confirmAlert({
@@ -27,10 +35,14 @@ export default function PatrimonyList(){
               {
                 label: 'Sim',
                 onClick: () =>{
-                    let dadosnovos = []
-                    dadosnovos=dados.filter(item=>item.id!==i)
-                    setDados(dadosnovos)
-                    localStorage.setItem("cd-patrimonio",JSON.stringify(dadosnovos))
+                    api.delete(`/patrimonios/${i}`)
+                    .then(res=>{});
+                    alert("Dados deletados com sucesso!");
+                    window.location.reload();
+                    // let dadosnovos = []
+                    // dadosnovos=dados.filter(item=>item.id!==i)
+                    // setDados(dadosnovos)
+                    // localStorage.setItem("cd-patrimonio",JSON.stringify(dadosnovos))
                 } 
               },
               {

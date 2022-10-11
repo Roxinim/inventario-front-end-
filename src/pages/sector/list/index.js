@@ -7,6 +7,7 @@ import {BiEditAlt} from "react-icons/bi"
 import {confirmAlert} from 'react-confirm-alert';
 import {FiFilePlus} from 'react-icons/fi'
 import '../../../components/head/react-confirm-alert.css'
+import api from '../../../server/api'
 export default function SectorList(){
     const [dados, setDados] = useState([]);
     useEffect(()=>{
@@ -16,8 +17,15 @@ export default function SectorList(){
         window.location.href=`/sector-edit/${i}`
     }
     function mostrarlista(){
-        let cadastros = JSON.parse(localStorage.getItem("cd-setor")||"[]");;
-        setDados(cadastros);
+        api.get('/setores')
+        .then(res=>{
+            if(res.status==200){
+                setDados(res.data.setor);
+            } else{console.log("Houve um erro na requisição")}
+        })
+        .then((data)=>console.log(data));
+        // let cadastros = JSON.parse(localStorage.getItem("cd-setor")||"[]");;
+        // setDados(cadastros);
     }
     function excluir(i, nome){
         confirmAlert({
@@ -27,10 +35,14 @@ export default function SectorList(){
               {
                 label: 'Sim',
                 onClick: () =>{
-                    let dadosnovos = []
-                    dadosnovos=dados.filter(item=>item.id!==i)
-                    setDados(dadosnovos)
-                    localStorage.setItem("cd-setor",JSON.stringify(dadosnovos))
+                    api.delete(`/setores/${i}`)
+                    .then(res=>{});
+                    alert("Dados deletados com sucesso!");
+                    window.location.reload()
+                    // let dadosnovos = []
+                    // dadosnovos=dados.filter(item=>item.id!==i)
+                    // setDados(dadosnovos)
+                    // localStorage.setItem("cd-setor",JSON.stringify(dadosnovos))
                 } 
               },
               {
@@ -43,7 +55,7 @@ export default function SectorList(){
         <div className='dashboard-container'>
             <Menu/>
             <div className='principal'>
-                <Head title="Setors" />
+                <Head title="Setores" />
                 <a href='/sector-sign-in' title='Cadastrar' className='cadastrar'> <FiFilePlus size={50} color="green" cursor="pointer"/> </a>
                 {dados.length>0 ?
                 <table border={5}>

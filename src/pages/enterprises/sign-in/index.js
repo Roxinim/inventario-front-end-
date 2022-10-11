@@ -1,21 +1,26 @@
 import React,{useState} from 'react'
 // import './style.css'
 import '../../../global.css'
-import { useHistory } from 'react-router-dom'
+// import { useHistory } from 'react-router-dom'
 import Menu from '../../../components/menu'
 import Head from '../../../components/head'
-import Usuarios from '../../../server/usuario.json'
-import {confirmAlert} from 'react-confirm-alert' 
+// import Usuarios from '../../../server/usuario.json'
+// import {confirmAlert} from 'react-confirm-alert' 
+import api from '../../../server/api'
 // import 'react-confirm-alert/src/react-confirm-alert.css'; 
 import '../../../components/head/react-confirm-alert.css'
 export default function EnterprisesSignIn(){
     
-    const history =  useHistory();
+    // const history =  useHistory();
     const [nome, setNome] = useState('');
-    const [resp,setResp] = useState('');
+    const [responsavel,setResponsavel] = useState('');
     const [contato,setContato] = useState('');
     const [msg, setMsg] = useState('');
-    
+    const dados={
+        nome,
+        responsavel,
+        contato
+    }
     // const dados=[
     //     {
     //     id:1,
@@ -31,23 +36,32 @@ export default function EnterprisesSignIn(){
         if(nome.length<3){
           setMsg("O Nome precisa ter 3 caracteres ou mais.")
           index++
-        } else if(nome==="" ||resp===""||contato===""){
+        } else if(nome==="" ||responsavel===""||contato===""){
           setMsg("Preencha os campos!")
           index++
         }
         if (index===0){
-            let listaEmpresa = JSON.parse(localStorage.getItem("cd-empresas")||"[]")
-            listaEmpresa.push(
-                {
-                    id:Date.now().toString(36)+Math.floor(Math.pow(10,12)+Math.random()*9*Math.pow(10,12)).toString(36),
-                    nome:nome,  
-                    resp:resp,
-                    contato:contato
-                }
-            )
-            localStorage.setItem("cd-empresas",JSON.stringify(listaEmpresa))
-            alert("Cadastro realizado!")
-            window.location.href="/enterprises"
+            api.post("empresas",
+                dados,
+                {headers:{'Content-Type':'application/json'}}).then(function(response){
+                    alert("DEU CERTO");
+                    window.location.href="/enterprises";
+            })
+        }
+        
+    }
+            // let listaEmpresa = JSON.parse(localStorage.getItem("cd-empresas")||"[]")
+            // listaEmpresa.push(
+            //     {
+            //         id:Date.now().toString(36)+Math.floor(Math.pow(10,12)+Math.random()*9*Math.pow(10,12)).toString(36),
+            //         nome:nome,  
+            //         responsavel:responsavel,
+            //         contato:contato
+            //     }
+            // )
+            // localStorage.setItem("cd-empresas",JSON.stringify(listaEmpresa))
+            // alert("Cadastro realizado!")
+            // window.location.href="/enterprises"
 
         // let novodados=[];
         // let cadastros=[];
@@ -65,9 +79,7 @@ export default function EnterprisesSignIn(){
         // // let cadastros = localStorage.getItem("")
 
         // alert("Cadastro realizado com sucesso!")
-        }
-        
-    }
+       
     // function excluir(i, nome){
     //     confirmAlert({
     //         title: 'Excluir Usuário',
@@ -100,7 +112,7 @@ export default function EnterprisesSignIn(){
                                 <label>Nome</label>
                                 <input className="input-sign-in" value={nome} onChange={e=>setNome(e.target.value)} />
                                 <label>Responsável</label>
-                                <input className="input-sign-in" value={resp} onChange={e=>setResp(e.target.value)} />
+                                <input className="input-sign-in" value={responsavel} onChange={e=>setResponsavel(e.target.value)} />
                                 <label>Contato</label>
                                 <input className="input-sign-in" value={contato} onChange={e=>setContato(e.target.value)}/>
                                 <p>{msg}</p>

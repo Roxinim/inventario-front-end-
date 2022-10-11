@@ -3,13 +3,14 @@ import './style.css'
 import "../../../global.css"
 import Menu from '../../../components/menu'
 import Head from '../../../components/head'
-import Usuarios from '../../../server/usuario.json'
+// import Usuarios from '../../../server/usuario.json'
 import {GoTrashcan} from "react-icons/go"
 import {BiEditAlt} from "react-icons/bi"
 import { confirmAlert } from 'react-confirm-alert'; 
 // import 'react-confirm-alert/src/react-confirm-alert.css'; 
 import '../../../components/head/react-confirm-alert.css'
 import { FiFilePlus } from 'react-icons/fi'
+import api from '../../../server/api'
 export default function UserList(){
     const [dados, setDados] = useState([]);
     useEffect(()=>{
@@ -20,8 +21,18 @@ export default function UserList(){
     }
     function mostrarlista(){
         // let novodados=[];
-        let cadastros = JSON.parse(localStorage.getItem("cd-usuarios")||"[]");;
-        setDados(cadastros);
+        // let cadastros = JSON.parse(localStorage.getItem("cd-usuarios")||"[]");;
+        // setDados(cadastros);
+        // fetch('http://10.1.2.189:5000/usuarios')
+        // .then((response)=>response.json())
+        // .then((data)=>setDados(data.usuario))
+        api.get('/usuarios')
+        .then(res=>{
+            if(res.status==200){
+                setDados(res.data.usuario);
+            } else{console.log("Houve um erro na requisição")}
+        })
+        .then((data)=>console.log(data));
     }
     function excluir(i, nome){
         confirmAlert({
@@ -31,10 +42,15 @@ export default function UserList(){
               {
                 label: 'Sim',
                 onClick: () =>{
-                    let dadosnovos = []
-                    dadosnovos=dados.filter(item=>item.id!==i)
-                    setDados(dadosnovos)
-                    localStorage.setItem("cd-usuarios",JSON.stringify(dadosnovos))
+                    api.delete(`/usuarios/${i}`)
+                    .then(res=>{});
+                    alert("Dados deletados com sucesso!");
+                    window.location.reload();
+                    // mostrarlista();
+                    // let dadosnovos = []
+                    // dadosnovos=dados.filter(item=>item.id!==i)
+                    // setDados(dadosnovos)
+                    // localStorage.setItem("cd-usuarios",JSON.stringify(dadosnovos))
                 } 
               },
               {
@@ -60,7 +76,7 @@ export default function UserList(){
                         <th>Id</th>
                         <th>Nome</th>
                         <th>Email</th>
-                        
+                        {/* <th>Senha</th> */}
                     </tr>
                    
                     {
@@ -70,8 +86,9 @@ export default function UserList(){
                                 <td>{usu.id}</td>
                                 <td>{usu.nome}</td>
                                 <td>{usu.email}</td>
+                                {/* <td>{usu.senha}</td> */}
                                 <td className='btn' onClick={(e)=>editar(usu.id)}><BiEditAlt /></td>
-                                <td className='btn' onClick={(e)=>excluir(usu.id, usu.nomeusuario)}><GoTrashcan /></td>
+                                <td className='btn' onClick={(e)=>excluir(usu.id, usu.nome)}><GoTrashcan /></td>
                                 
                             </tr>
                             )
@@ -84,7 +101,7 @@ export default function UserList(){
                         <th>Id</th>
                         <th>Nome</th>
                         <th>Email</th>
-                        
+                        {/* <th>Senha</th> */}
                     </tr>
                 </table>
                 }

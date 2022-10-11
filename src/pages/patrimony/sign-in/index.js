@@ -3,10 +3,13 @@ import '../../../global.css'
 import Menu from '../../../components/menu'
 import Head from '../../../components/head'
 import '../../../components/head/react-confirm-alert.css'
+import api from '../../../server/api'
 export default function PatrimonySignIn(){
-    
+
     const [nome, setNome] = useState('');
     const [msg, setMsg] = useState('');
+    const dados=
+    {nome}
     function salvarDados(e){
         e.preventDefault();
         let index=0;
@@ -18,18 +21,24 @@ export default function PatrimonySignIn(){
           index++
         }
         if (index===0){
-            let listaPatrimonio = JSON.parse(localStorage.getItem("cd-patrimonio")||"[]")
-            listaPatrimonio.push(
-                {
-                    id:Date.now().toString(36)+Math.floor(Math.pow(10,12)+Math.random()*9*Math.pow(10,12)).toString(36),
-                    nome:nome,  
-                }
-            )
-            localStorage.setItem("cd-patrimonio",JSON.stringify(listaPatrimonio))
-            alert("Cadastro realizado!")
-            window.location.href="/patrimony"
+            api.post("patrimonios",
+            dados,
+            {headers:{'Content-Type':'application/json'}}).then(function(response){
+                alert("DEU CERTO");
+                window.location.href="/patrimony";
+            })
         }
-        
+    
+            // let listaPatrimonio = JSON.parse(localStorage.getItem("cd-patrimonio")||"[]")
+            // listaPatrimonio.push(
+            //     {
+            //         id:Date.now().toString(36)+Math.floor(Math.pow(10,12)+Math.random()*9*Math.pow(10,12)).toString(36),
+            //         nome:nome,  
+            //     }
+            // )
+            // localStorage.setItem("cd-patrimonio",JSON.stringify(listaPatrimonio))
+            // alert("Cadastro realizado!")
+            // window.location.href="/patrimony"
     }
     return(
         <div className='dashboard-container'>

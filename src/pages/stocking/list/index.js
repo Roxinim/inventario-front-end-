@@ -7,6 +7,7 @@ import {BiEditAlt} from "react-icons/bi"
 import {confirmAlert} from 'react-confirm-alert';
 import {FiFilePlus} from 'react-icons/fi'
 import '../../../components/head/react-confirm-alert.css'
+import api from '../../../server/api'
 export default function Stocking(){
     // const [dadosL, setDadosL] = useState([]);
     // const [dadosU, setDadosU] = useState([]);
@@ -18,43 +19,51 @@ export default function Stocking(){
     // const [idemp, setIdemp] = useState("")
     // const [idpat, setIdpat] = useState("")
     // const [idset, setIdset] = useState("")
-    let listaUsuario =    JSON.parse(localStorage.getItem("cd-usuarios")||"[]")
-    let listaEmpresa =    JSON.parse(localStorage.getItem("cd-empresas")||"[]")
-    let listaSetor =      JSON.parse(localStorage.getItem("cd-setor")||"[]")
-    let listaPatrimonio = JSON.parse(localStorage.getItem("cd-patrimonio")||"[]")
+    // let listaUsuario =    JSON.parse(localStorage.getItem("cd-usuarios")||"[]")
+    // let listaEmpresa =    JSON.parse(localStorage.getItem("cd-empresas")||"[]")
+    // let listaSetor =      JSON.parse(localStorage.getItem("cd-setor")||"[]")
+    // let listaPatrimonio = JSON.parse(localStorage.getItem("cd-patrimonio")||"[]")
     useEffect(()=>{
     mostrarlista();
     },[])
     function editar(i){
         window.location.href=`/stocking-edit/${i}`
     }
-    function filtrarnome(i, u){
-        let dadosnovos = []
+    // function filtrarnome(i, u){
+    //     let dadosnovos = []
        
-        switch(u){
-            case 1:
-            dadosnovos=listaUsuario.filter(item=>item.id==i)
-            break;
-            case 2:
-            dadosnovos=listaPatrimonio.filter(item=>item.id==i)
-            break;
-            case 3:
-            dadosnovos=listaSetor.filter(item=>item.id==i)
-            break;
-            case 4:
-            dadosnovos=listaEmpresa.filter(item=>item.id==i)
-            break;
-        }
-        // if (u==1){
-        // dadosnovos=listaUsuario.filter(item=>item.id==i)
-        // }
-        return dadosnovos[0].nome
-        // return dadosnovos.nome;
-    } 
+    //     switch(u){
+    //         case 1:
+    //         dadosnovos=listaUsuario.filter(item=>item.id==i)
+    //         break;
+    //         case 2:
+    //         dadosnovos=listaPatrimonio.filter(item=>item.id==i)
+    //         break;
+    //         case 3:
+    //         dadosnovos=listaSetor.filter(item=>item.id==i)
+    //         break;
+    //         case 4:
+    //         dadosnovos=listaEmpresa.filter(item=>item.id==i)
+    //         break;
+    //     }
+    //     // if (u==1){
+    //     // dadosnovos=listaUsuario.filter(item=>item.id==i)
+    //     // }
+    //     return dadosnovos[0].nome
+    //     // return dadosnovos.nome;
+    // } 
     
     function mostrarlista(){
-        let cadastros = JSON.parse(localStorage.getItem("cd-lotacao")||"[]");
-        setDados(cadastros);
+        api.get('/lotacao')
+        .then(res=>{
+            if(res.status==200){
+                setDados(res.data.lotacao);
+            } else{console.log("Houve um erro na requisição")}
+        })
+        // .then((data)=>console.log(data));
+        
+        // let cadastros = JSON.parse(localStorage.getItem("cd-lotacao")||"[]");
+        // setDados(cadastros);
         // let cadastrosL = JSON.parse(localStorage.getItem("")||"[]");;
         // let cadastrosU = JSON.parse(localStorage.getItem("cd-usuario")||"[]");;
         // let cadastrosP = JSON.parse(localStorage.getItem("cd-patrimonio")||"[]");;
@@ -63,6 +72,16 @@ export default function Stocking(){
         // setDadosU(cadastrosU);
         // setDadosP(cadastrosP);
         // setDadosS(cadastrosS);
+    }
+    function formatardata(d){
+        var data = new Date(d),
+            dia  = data.getDate().toString(),
+            diaF = (dia.length == 1) ? '0'+dia:dia,
+            mes = (data.getMonth()+1).toString(),
+            mesF = (mes.length == 1) ? '0'+mes:mes,
+            anoF = data.getFullYear();
+            return diaF+"/"+mesF+"/"+anoF
+
     }
     function excluir(i, nome){
         confirmAlert({
@@ -105,11 +124,15 @@ export default function Stocking(){
                             return(
                             <tr>
                                 <td>{usu.id}</td>
-                                <td>{filtrarnome(usu.idusu, 1) }</td>
-                                <td>{filtrarnome(usu.idpat, 2) }</td>
-                                <td>{filtrarnome(usu.idset, 3) }</td>
-                                <td>{filtrarnome(usu.idemp, 4) }</td>
-                                <td>{usu.data}</td>
+                                <td>{usu.usuario}</td>
+                                <td>{usu.patrimonio}</td>
+                                <td>{usu.setor}</td>
+                                <td>{usu.empresa}</td>
+                                <td>{formatardata(usu.criado_em)}</td>
+                                {/* filtrarnome(usu.idusu, 1) 
+                                    filtrarnome(usu.idpat, 2) 
+                                    filtrarnome(usu.idset, 3) 
+                                    filtrarnome(usu.idemp, 4)  */}
                                 {/* <td>{usu.idpat}</td>
                                 <td>{usu.idset}</td>
                                 <td>{usu.idemp}</td> */}

@@ -4,9 +4,9 @@ import "../../../global.css"
 import {  useParams} from 'react-router-dom'
 import Menu from '../../../components/menu'
 import Head from '../../../components/head'
-import Usuarios from '../../../server/usuario.json'
-import { confirmAlert } from 'react-confirm-alert';
-
+// import Usuarios from '../../../server/usuario.json'
+// import { confirmAlert } from 'react-confirm-alert';
+import api from '../../../server/api'
 // import 'react-confirm-alert/src/react-confirm-alert.css'; 
 import '../../../components/head/react-confirm-alert.css'
 export default function UserEdit() {
@@ -18,42 +18,35 @@ export default function UserEdit() {
     const [confSenha, setConfSenha] = useState('');
     const [valida, setValida] = useState(true);
     const [msg, setMsg] = useState('');
-    // const dados = [
-    //     {
-    //         id: id,
-    //         email: email,
-    //         nome: nome,
-    //         senha: senha
-    //     }
-    // ]
+    const dados = 
+        {id,
+        email,
+        nome,
+        senha}
     useEffect(()=>{
         mostrarDados();
     },[])
     function mostrarDados(){
-        let listaUser = JSON.parse(localStorage.getItem("cd-usuarios"))
-        listaUser.filter(value => value.id == id).map(value =>{
-            setNome(value.nome);
-            setEmail(value.email);
-            setSenha(value.senha);
-            setConfSenha(value.senha);
+        // let listaUser = JSON.parse(localStorage.getItem("cd-usuarios"))
+        // listaUser.filter(value => value.id == id).map(value =>{
+        //     setNome(value.nome);
+        //     setEmail(value.email);
+        //     setSenha(value.senha);
+        //     setConfSenha(value.senha);
+        // })
+        api.get(`/usuarios/${id}`)
+        .then(res=>{
+            if(res.status===200){
+                let resultado=res.data.usuario
+                setNome(resultado[0].nome);
+                setEmail(resultado[0].email);
+                setSenha(resultado[0].senha);
+                setConfSenha(resultado[0].senha);
+            } else{console.log("Houve um erro na requisição")}
         })
-    }
-    function excluir(i, nome) {
-        confirmAlert({
-            title: 'Excluir Usuário',
-            message: `Tem certeza que deseja excluir ${nome}?`,
-            buttons: [
-                {
-                    label: 'Sim',
-                    onClick: () => alert('Click Yes')
-                },
-                {
-                    label: 'Não',
-                    onClick: () => alert('Click No')
-                }
-            ]
+        .catch(function(error){
+            console.log(error);
         });
-        // window.confirm()
     }
     function validarSenha() {
         if (senha !== "") {
@@ -86,18 +79,24 @@ export default function UserEdit() {
                 setMsg("O Email está vazio!")
                 index++
             }
-            if (index === 0) {                                    
-                alert("Cadastro realizado com sucesso!")
-                let listaUser = JSON.parse(localStorage.getItem("cd-usuarios"))
-                listaUser.map((item)=>{
-                    if(item.id==id){
-                        item.nome=nome;
-                        item.email=email;
-                        item.senha=senha;
-                    }
-                })
-                localStorage.setItem("cd-usuarios",JSON.stringify(listaUser))
-                window.location.href="/userlist"
+            if (index === 0) {
+                api.patch("usuarios",
+                dados,
+                {headers:{'Content-Type':'application/json'}}).then(function (response){
+                    alert("DEU CERTO");
+                    window.location.href="/userlist";
+                })                             
+                // alert("Cadastro realizado com sucesso!")
+                // let listaUser = JSON.parse(localStorage.getItem("cd-usuarios"))
+                // listaUser.map((item)=>{
+                //     if(item.id==id){
+                //         item.nome=nome;
+                //         item.email=email;
+                //         item.senha=senha;
+                //     }
+                // })
+                // localStorage.setItem("cd-usuarios",JSON.stringify(listaUser))
+                // window.location.href="/userlist"
             }
         }
     }
@@ -107,7 +106,7 @@ export default function UserEdit() {
             <div className='principal'>
                 <Head title="Editar Usuário" />
                 <section className='form'>
-                    <div class="form-cadastro">
+                    <div className="form-cadastro">
     
                         <form onSubmit={salvarDados}>
                             {/* <p>{id}</p> */}

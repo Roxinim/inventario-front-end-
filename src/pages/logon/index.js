@@ -3,7 +3,10 @@ import './style.css'
 import "../../global.css"
 import {useHistory} from 'react-router-dom'
 import Usuario from '../../server/usuario.json'
-export default function Logon(){
+import api from '../../server/api'
+import PropTypes from 'prop-types';
+
+export default function Logon({setToken}){
     const history =  useHistory();
     let [id, setId] = useState('');
     let [nome, setNome] = useState('');
@@ -15,38 +18,78 @@ export default function Logon(){
         id:id,
         senha:senha
         }]
-    function logar(){
-        // e.preventDefault()
+        
+    const handleSubmit = async e => {
+        e.preventDefault();
+        const token = await loginUser({
+          nome,
+          senha
+        });
+        setToken(token);
+    }       
+    async function loginUser(credentials) {
+        return fetch('http://localhost:5000/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(credentials)
+        })
+          .then(data => data.json())
+    }
+    function logar(e){
+        e.preventDefault()
         let usu;
-        if(email == ""|| senha==""){
+        if(email === ""|| senha===""){
             alert("Preencha os campos necessários!");
         } else {
-            usu=Usuario.filter(function(value){
-                return value.email==email && value.senha==senha;
 
-            })
-            if(usu.length>0){
-                // usu.filter(function(value){
-                //     setNome(value.nomeusuario)
-                //     setId(value.id)
-                // })
-                // console.log(dados.nome)  
-                console.log(usu)
-                // setSenha(usu[0].senha)
-                setNome(usu[0].nomeusuario)
-                setId(usu[0].id)
-                // setTimeout(e=> {
-                    localStorage.setItem("usuario",JSON.stringify(usu))
+            api.post(`/usuarios/logar`,{email:email,senha:senha})
+            .then(res => {
+              if(res.status==200){
+                let resultado=res.data.usuario;
+                    if(resultado.length>0){
+                        window.location.href="/dashboard"
+                    }else{
+                        alert("Digite Email ou Senha validos")
+                    }
 
-                    // console.log(dados)  
-                    // const value = localStorage.getItem("usuario")
-                    // const json=JSON.parse(value)
-                    // console.log(value)
-                    // console.log(json)
-                    history.push('/dashboard')
-                // }, 1000);
+              }else{
+                  console.log("houve um erro na requisição")
+              }
 
-            } else {alert("Email ou senha inválidos.")}
+            })  
+            .catch(function (error) {
+              console.log(error);
+            });
+
+
+            // usu=Usuario.filter(function(value){
+            //     return value.email==email && value.senha==senha;
+
+            // })
+            // if(usu.length>0){
+            //     // usu.filter(function(value){
+            //     //     setNome(value.nomeusuario)
+            //     //     setId(value.id)
+            //     // })
+            //     // console.log(dados.nome)  
+            //     console.log(usu)
+            //     // setSenha(usu[0].senha)
+            //     setNome(usu[0].nomeusuario)
+            //     setId(usu[0].id)
+            //     // setTimeout(e=> {
+            //         localStorage.setItem("usuario",JSON.stringify(usu))
+
+            //         // console.log(dados)  
+            //         // const value = localStorage.getItem("usuario")
+            //         // const json=JSON.parse(value)
+            //         // console.log(value)
+            //         // console.log(json)
+            //         history.push('/dashboard')
+            //     // }, 1000);
+
+            // } else {alert("Email ou senha inválidos.")}
 
             // Usuario.map(usu=>{
             //     if(usu.email===email && usu.senha===senha){
@@ -66,7 +109,7 @@ export default function Logon(){
             </p> */}
             <section className='form'>
                 
-                <form onSubmit={logar}>
+                <form onSubmit={handleSubmit}>
                 <h1 className='titulo'>Sistema de Inventário</h1>
 
                     {/* <img src={Logo}></img> */}
@@ -80,8 +123,12 @@ export default function Logon(){
             </section>
             <section className='imagem'>
                 
-                <img src='https://static2.minhalojanouol.com.br/tupperwaredocerrado/produto/multifotos/hd/20210515182711_1740998260_DZ.png'></img>
+                {/* <img src='https://static20.minhalojanouol.com.br/tupperwaredocerrado/produto/multifotos/hd/20210515182711_1740998260_DZ.png'></img> */}
+                <img src='https://d1j3qugeyybc8o.cloudfront.net/app/uploads/2022/08/ExpertAppraisal_icon_Web.png'></img>
             </section>
         </div>
     )
 }
+Logon.propTypes = {
+    setToken: PropTypes.func.isRequired
+  };

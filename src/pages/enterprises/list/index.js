@@ -7,19 +7,26 @@ import {BiEditAlt} from "react-icons/bi"
 import {confirmAlert} from 'react-confirm-alert';
 import {FiFilePlus} from 'react-icons/fi'
 import '../../../components/head/react-confirm-alert.css'
+import api from '../../../server/api'
 export default function EnterprisesList(){
     const [dados, setDados] = useState([]);
     useEffect(()=>{
     mostrarlista();
-    },[
-        
-    ])
+    },[])
     function editar(i){
         window.location.href=`/enterprises-edit/${i}`
     }
     function mostrarlista(){
-        let cadastros = JSON.parse(localStorage.getItem("cd-empresas")||"[]");;
-        setDados(cadastros);
+        api.get('/empresas')
+        .then(res=>{
+            if(res.status==200){
+                setDados(res.data.empresa);
+            } else{console.log("Houve um erro na requisição")}
+        })
+        .then((data)=>console.log(data));
+        // let cadastros = JSON.parse(localStorage.getItem("cd-empresas")||"[]");;
+        // setDados(cadastros);
+        
     }
     function excluir(i, nome){
         confirmAlert({
@@ -29,10 +36,14 @@ export default function EnterprisesList(){
               {
                 label: 'Sim',
                 onClick: () =>{
-                    let dadosnovos = []
-                    dadosnovos=dados.filter(item=>item.id!==i)
-                    setDados(dadosnovos)
-                    localStorage.setItem("cd-empresas",JSON.stringify(dadosnovos))
+                    // let dadosnovos = []
+                    // dadosnovos=dados.filter(item=>item.id!==i)
+                    // setDados(dadosnovos)
+                    // localStorage.setItem("cd-empresas",JSON.stringify(dadosnovos))
+                    api.delete(`/empresas/${i}`)
+                    .then(res=>{});
+                    alert("Dados deletados com sucesso!");
+                    window.location.reload()
                 } 
               },
               {
@@ -63,10 +74,10 @@ export default function EnterprisesList(){
                             <tr>
                                 <td>{usu.id}</td>
                                 <td>{usu.nome}</td>
-                                <td>{usu.resp}</td>
+                                <td>{usu.responsavel}</td>
                                 <td>{usu.contato}</td>
                                 <td className='btn' onClick={(e)=>editar(usu.id)}><BiEditAlt /></td>
-                                <td className='btn' onClick={(e)=>excluir(usu.id, usu.nomeusuario)}><GoTrashcan /></td>
+                                <td className='btn' onClick={(e)=>excluir(usu.id, usu.nome)}><GoTrashcan /></td>
                                 
                             </tr>
                             )

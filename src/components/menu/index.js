@@ -20,7 +20,7 @@ export default function Menu(){
     return( 
         <div className='menu'>
             <div>
-                <h1>Menu</h1>
+                <a href='/dashboard'><h1>Inventário</h1></a>
                 <a href='/userlist'><FiUser/>Usuários</a>
                 <a href='/enterprises'><FiTruck/>Empresas</a>
                 <a href='/patrimony'><RiNewspaperLine/>Patrimônio</a>

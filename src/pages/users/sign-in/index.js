@@ -1,76 +1,88 @@
-import React,{useState, useEffect} from 'react'
+import React,{useState} from 'react'
 import './style.css'
 import "../../../global.css"
-import { useHistory } from 'react-router-dom'
+// import { useHistory } from 'react-router-dom'
 import Menu from '../../../components/menu'
 import Head from '../../../components/head'
-import Usuarios from '../../../server/usuario.json'
-import { confirmAlert } from 'react-confirm-alert'; 
+// import Usuarios from '../../../server/usuario.json'
+// import { confirmAlert } from 'react-confirm-alert'; 
 // import 'react-confirm-alert/src/react-confirm-alert.css'; 
 import '../../../components/head/react-confirm-alert.css'
+import api from '../../../server/api'
 export default function SignIn(){
-    
-    const history =  useHistory();
+    // const navigate = useHistory();
+    // const history =  useHistory();
     const [nome, setNome] = useState('');
     const [email,setEmail] = useState('');
     const [senha,setSenha] = useState('');
     const [confSenha,setConfSenha] = useState('');
     const [valida, setValida] = useState(true);
     const [msg, setMsg] = useState('');
-    const [usu, setUsu] = useState('');
+    // const [usu, setUsu] = useState('');
     
-    // const dados=[
-    //     {
-    //     id:1,
-    //     email:email,
-    //     nome:nome,  
-    //     senha:senha
-    //   }
-    // ]
+    const dados={
+        nome,
+        email,
+        senha
+    }
     function validarSenha(){
         if (senha!==""){
-          if(senha!==confSenha){
+            if(senha!==confSenha){
             setValida(false)
             setMsg("Senhas NÃO conferem!")
-          }else{
+            }else{
             setValida(true)
             setMsg("Senhas conferem!")
-          }
+            }
         }else{
-          setValida(false)
-          setMsg("Digite uma senha!")
-          setTimeout(() => {
-            setMsg("")
-          }, 4000);
+            setValida(false)
+            setMsg("Digite uma senha!")
+            setTimeout(() => {
+                setMsg("")
+            }, 4000);
         }
       }
-      function salvarDados(e){
+    function salvarDados(e){
         e.preventDefault();
         validarSenha();
         if (valida === false){
-          setMsg("Cadastro falhou, tente novamente")
+            setMsg("Cadastro falhou, tente novamente")
         }else {
-          let index=0;
-          if(nome.length<=3){
-            setMsg("O Nome precisa ter acima de 3 caracteres.")
-            index++
-          } else if(email===""){
-            setMsg("O Email está vazio!")
-            index++
-          }
-          if (index===0){
-            let listaUser = JSON.parse(localStorage.getItem("cd-usuarios")||"[]")
-            listaUser.push(
-                {
-                    id:Date.now().toString(36)+Math.floor(Math.pow(10,12)+Math.random()*9*Math.pow(10,12)).toString(36),
-                    email:email,
-                    nome:nome,  
-                    senha:senha
-                }
-            )
-            localStorage.setItem("cd-usuarios",JSON.stringify(listaUser))
-            alert("Cadastro realizado!")
-            window.location.href="/userlist"
+            let index=0;
+            if(nome.length<=3){
+                setMsg("O Nome precisa ter acima de 3 caracteres.")
+                index++
+            } else if(email===""){
+                setMsg("O Email está vazio!")
+                index++
+            }
+            if (index===0){
+                api.post("usuarios",
+                dados,
+                {headers:{'Content-Type':'application/json'}}).then(function(response){
+                    alert("DEU CERTO");
+                    window.location.href="/userlist";
+                })
+                // try{
+                //     const response = await api.post(`/usuarios/`,dados)
+                //     alert(`Seu ID de acesso: ${response.data.usuario}`);
+                //     // window.location.href="/userlist";
+                // }catch(err){
+                //         alert('Erro no cadastro, tente novamente!');
+                // }
+                
+            // let listaUser = JSON.parse(localStorage.getItem("cd-usuarios")||"[]")
+            // listaUser.push(
+            //     {
+            //         id:Date.now().toString(36)+Math.floor(Math.pow(10,12)+Math.random()*9*Math.pow(10,12)).toString(36),
+            //         email:email,
+            //         nome:nome,  
+            //         senha:senha
+            //     }
+            // )
+            // localStorage.setItem("cd-usuarios",JSON.stringify(listaUser))
+            // alert("Cadastro realizado!")
+            // window.location.href="/userlist"
 
             // let novodados=[];
             // let cadastros=[];
@@ -91,24 +103,6 @@ export default function SignIn(){
           }
         }
       }
-    function excluir(i, nome){
-        confirmAlert({
-            title: 'Excluir Usuário',
-            message: `Tem certeza que deseja excluir ${nome}?`,
-            buttons: [
-              {
-                label: 'Sim',
-                onClick: () => alert('Click Yes')
-              },
-              {
-                label: 'Não',
-                onClick: () => alert('Click No')
-              }
-            ]
-          });
-        // window.confirm()
-    }
-    
     return(
         <div className='dashboard-container'>
             <Menu/>

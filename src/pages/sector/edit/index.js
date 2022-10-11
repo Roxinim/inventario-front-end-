@@ -4,19 +4,30 @@ import {useParams} from 'react-router-dom'
 import Menu from '../../../components/menu'
 import Head from '../../../components/head'
 import '../../../components/head/react-confirm-alert.css'
+import api from '../../../server/api'
 export default function SectorEdit() {
     
     const {id} = useParams();
     const [nome, setNome] = useState('');
     const [msg, setMsg] = useState('');
+    const dados = 
+        {id,
+        nome}
     useEffect(()=>{
         mostrarDados();
     },[])
     function mostrarDados(){
-        let listaSetor = JSON.parse(localStorage.getItem("cd-setor"))
-        listaSetor.filter(value => value.id == id).map(value =>{
-            setNome(value.nome);
-        })
+        api.get(`/setores/${id}`)
+        .then(res=>{
+            if(res.status==200){
+                let resultado=res.data.setor
+                setNome(resultado[0].nome);
+            } else{console.log("Houve um erro na requisição")}
+        });
+        // let listaSetor = JSON.parse(localStorage.getItem("cd-setor"))
+        // listaSetor.filter(value => value.id == id).map(value =>{
+        //     setNome(value.nome);
+        // })
     }
     function salvarDados(e){
         e.preventDefault();
@@ -28,17 +39,23 @@ export default function SectorEdit() {
             setMsg("Preencha os campos!")
             index++
         }
-        if (index===0){          
-            let listaSetor = JSON.parse(localStorage.getItem("cd-setor"))
-            listaSetor.map((item)=>{
-                if(item.id==id){
-                    item.nome=nome;
-                }
-            })
-            localStorage.setItem("cd-setor",JSON.stringify(listaSetor))
-            window.location.href="/sector"
-            }
+        if (index===0){      
+            api.patch("setores",
+                dados,
+                {headers:{'Content-Type':'application/json'}}).then(function (response){
+                    alert("DEU CERTO");
+                    window.location.href="/sector";
+                })        
+            // let listaSetor = JSON.parse(localStorage.getItem("cd-setor"))
+            // listaSetor.map((item)=>{
+            //     if(item.id==id){
+            //         item.nome=nome;
+            //     }
+            // })
+            // localStorage.setItem("cd-setor",JSON.stringify(listaSetor))
+            // window.location.href="/sector"
         }
+    }
     return (
         <div className='dashboard-container'>
             <Menu />

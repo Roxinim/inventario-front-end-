@@ -3,10 +3,13 @@ import '../../../global.css'
 import Menu from '../../../components/menu'
 import Head from '../../../components/head'
 import '../../../components/head/react-confirm-alert.css'
+import api from '../../../server/api'
 export default function SectorSignIn(){
     
     const [nome, setNome] = useState('');
     const [msg, setMsg] = useState('');
+    const dados=
+    {nome}
     function salvarDados(e){
         e.preventDefault();
         let index=0;
@@ -18,16 +21,22 @@ export default function SectorSignIn(){
           index++
         }
         if (index===0){
-            let listaSetor = JSON.parse(localStorage.getItem("cd-setor")||"[]")
-            listaSetor.push(
-                {
-                    id:Date.now().toString(36)+Math.floor(Math.pow(10,12)+Math.random()*9*Math.pow(10,12)).toString(36),
-                    nome:nome,  
-                }
-            )
-            localStorage.setItem("cd-setor",JSON.stringify(listaSetor))
-            alert("Cadastro realizado!")
-            window.location.href="/sector"
+            api.post("setores",
+                dados,
+                {headers:{'Content-Type':'application/json'}}).then(function(response){
+                    alert("DEU CERTO");
+                    window.location.href="/sector";
+            })
+            // let listaSetor = JSON.parse(localStorage.getItem("cd-setor")||"[]")
+            // listaSetor.push(
+            //     {
+            //         id:Date.now().toString(36)+Math.floor(Math.pow(10,12)+Math.random()*9*Math.pow(10,12)).toString(36),
+            //         nome:nome,  
+            //     }
+            // )
+            // localStorage.setItem("cd-setor",JSON.stringify(listaSetor))
+            // alert("Cadastro realizado!")
+            // window.location.href="/sector"
         }
         
     }

@@ -122,3 +122,8 @@ tr{
 #logintitle{
     margin-bottom: 5px;
 }
+p{
+    /* text-indent: 30px; */
+    text-align: center;
+    font-size: 30px;
+}

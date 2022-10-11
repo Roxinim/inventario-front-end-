@@ -18,7 +18,9 @@ import Stocking from "./pages/stocking/list";
 import StockingEdit from "./pages/stocking/edit";
 import StockingSignIn from "./pages/stocking/sign-in";
 function Routes(){
+    
     return(
+        
         <BrowserRouter> 
             <Switch>
                 <Route component={Logon} exact path="/" />
