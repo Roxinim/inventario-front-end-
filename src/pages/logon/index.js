@@ -2,55 +2,146 @@ import React,{useEffect, useState} from 'react'
 import './style.css'
 import "../../global.css"
 import {useHistory} from 'react-router-dom'
-import Usuario from '../../server/usuario.json'
+// import Usuario from '../../server/usuario.json'
 import api from '../../server/api'
 import PropTypes from 'prop-types';
 
-export default function Logon({setToken}){
-    const history =  useHistory();
+export default function Logon(){
+                        // {setToken}
+    // const history =  useHistory();
     let [id, setId] = useState('');
     let [nome, setNome] = useState('');
     const [email,setEmail] = useState('');
     const [senha,setSenha] = useState('');
     const dados=[{
         email:email,
+        senha:senha,
         nome:nome,
-        id:id,
-        senha:senha
+        id:id
         }]
-        
-    const handleSubmit = async e => {
-        e.preventDefault();
-        const token = await loginUser({
-          nome,
-          senha
-        });
-        setToken(token);
-    }       
+             
     async function loginUser(credentials) {
-        return fetch('http://localhost:5000/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(credentials)
-        })
-          .then(data => data.json())
-    }
-    function logar(e){
-        e.preventDefault()
-        let usu;
         if(email === ""|| senha===""){
             alert("Preencha os campos necessários!");
         } else {
+            // return fetch('http://localhost:5000/login', {
+            // method: 'POST',
+            // headers: {
+            //     'Content-Type': 'application/json'
+            // },
+            // body: JSON.stringify(credentials)
+            // })
+            // .then(data => data.json())
 
             api.post(`/usuarios/logar`,{email:email,senha:senha})
             .then(res => {
-              if(res.status==200){
+              if(res.status===200){
                 let resultado=res.data.usuario;
                     if(resultado.length>0){
+                        return fetch('http://localhost:5000/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(credentials)
+                        })
+                        .then(data => data.json())
+                        // window.location.href="/dashboard"
+                    }else{
+                        alert("Digite Email ou Senha validos")
+                    }
+    
+              }else{
+                  console.log("houve um erro na requisição")
+              }
+    
+            })  
+            .catch(function (error) {
+              console.log(error);
+            });
+        }
+
+        // return fetch('http://localhost:8080/login', {
+        // method: 'POST',
+        // headers: {
+        //     'Content-Type': 'application/json'
+        // },
+        // body: JSON.stringify(credentials)
+        // })
+        // .then(data => data.json())
+    }
+    const handleSubmit = async e => {
+        e.preventDefault();
+
+        const token = await loginUser({
+          email,
+          senha
+        });
+        // setToken(token);
+
+        // console.log(token)
+
+        // if(email === ""|| senha===""){
+        //     alert("Preencha os campos necessários!");
+        // } else {
+    
+        //     api.post(`/usuarios/logar`,{email:email,senha:senha})
+        //     .then(res => {
+        //       if(res.status===200){
+        //         let resultado=res.data.usuario;
+        //             if(resultado.length>0){
+        //                 const token = await loginUser({
+        //                     email,
+        //                     senha
+        //                 });
+        //                 setToken(token);
+        //                 // return fetch('http://localhost:8080/login', {
+        //                 // method: 'POST',
+        //                 // headers: {
+        //                 //     'Content-Type': 'application/json'
+        //                 // },
+        //                 // body: JSON.stringify(credentials)
+        //                 // })
+        //                 // .then(data => data.json())
+        //                 // window.location.href="/dashboard"
+        //             }else{
+        //                 alert("Digite Email ou Senha validos")
+        //             }
+    
+        //       }else{
+        //           console.log("houve um erro na requisição")
+        //       }
+    
+        //     })  
+        //     .catch(function (error) {
+        //       console.log(error);
+        //     });
+        // }
+    }  
+
+    function logar(e){
+        e.preventDefault()
+        // let usu;
+        if(email === ""|| senha===""){
+            alert("Preencha os campos necessários!");
+        } else {
+            api.post(`/usuarios/logar`,{email:email,senha:senha})
+            .then(res => {
+              if(res.status===200){
+                let resultado=res.data.usuario;
+                    if(resultado.length>0){
+                        let session=
+                        {
+                            nome:resultado[0].nome,
+                            email:resultado[0].email,
+                            id:resultado[0].id
+                        }
+
+                        //aqui setamos a chave na sessionStorage
+                        sessionStorage.setItem("session",JSON.stringify(session))
                         window.location.href="/dashboard"
                     }else{
+                        sessionStorage.clear();
                         alert("Digite Email ou Senha validos")
                     }
 
@@ -62,7 +153,8 @@ export default function Logon({setToken}){
             .catch(function (error) {
               console.log(error);
             });
-
+        }
+    }
 
             // usu=Usuario.filter(function(value){
             //     return value.email==email && value.senha==senha;
@@ -99,8 +191,7 @@ export default function Logon({setToken}){
             //         setMsg("Dados não conferem!)                    
             //     }
             // })
-        }
-    }
+        
     // alert("Email ou senha inválido, tente novamente.")
     return( 
         <div className='logon-container'>
@@ -109,7 +200,7 @@ export default function Logon({setToken}){
             </p> */}
             <section className='form'>
                 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={logar}>
                 <h1 className='titulo'>Sistema de Inventário</h1>
 
                     {/* <img src={Logo}></img> */}

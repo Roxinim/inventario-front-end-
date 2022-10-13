@@ -137,7 +137,7 @@ export default function Stocking(){
                                 <td>{usu.idset}</td>
                                 <td>{usu.idemp}</td> */}
                                 <td className='btn' onClick={(e)=>editar(usu.id)}><BiEditAlt /></td>
-                                <td className='btn' onClick={(e)=>excluir(usu.id, usu.nome)}><GoTrashcan /></td>
+                                <td className='btn' onClick={(e)=>excluir(usu.id, usu.id)}><GoTrashcan /></td>
                                 
                             </tr>
                             )

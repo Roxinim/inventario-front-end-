@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Logon from "./pages/logon";
 import Dashboard from "./pages/dashboard";
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
@@ -17,8 +17,21 @@ import SectorEdit from "./pages/sector/edit";
 import Stocking from "./pages/stocking/list";
 import StockingEdit from "./pages/stocking/edit";
 import StockingSignIn from "./pages/stocking/sign-in";
+import useToken from "./components/useToken";
+function setToken(userToken){
+    sessionStorage.setItem('token',JSON.stringify(userToken));
+}
+function getToken(){
+    const tokenString = sessionStorage.getItem('token');
+    const userToken = JSON.parse(tokenString);
+    return userToken?.token
+}
 function Routes(){
-    
+    // const { token, setToken } = useToken();
+    // if (!token){
+    //     return <Logon setToken={setToken}/>
+    // }
+    // const token = getToken();
     return(
         
         <BrowserRouter> 

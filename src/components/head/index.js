@@ -4,9 +4,14 @@ import '../../global.css'
 import { useHistory } from 'react-router-dom'
 import { FiFilePlus, FiLogOut } from 'react-icons/fi'
 import { confirmAlert } from 'react-confirm-alert'; 
+import { TbDiamonds } from 'react-icons/tb'
 // import 'react-confirm-alert/src/react-confirm-alert.css'; 
 // import './react-confirm-alert.css'
 export default function Head({title}){
+    const history = useHistory();
+    const[nome,setNome] = useState();
+    const[quant,setQuant] = useState();
+    const[dados,setDados] = useState([]);
     function Sair(i, nome){
         confirmAlert({
             title: 'Confirmar saída',
@@ -23,11 +28,26 @@ export default function Head({title}){
             ]
           });
     }
+    // useEffect(()=>{
+
+    //         verificarsession();
+    // },[])
+    // function verificarsession(){
+    //     let session =JSON.parse(sessionStorage.getItem("session")|| "[]");
+    //     console.log(session.nome);
+    //     setDados(session);
+
+    //     if(dados.length>0){
+    //     setNome(session.nome);
+    //     }else{
+    //         alert("você não tem autorização para acessar esse modulo")
+    //     } 
+    // }
+    
     // function Redirect(){
     //     let novolink = console.log(window.location.href);
     //     novolink.substr()
     // }
-    const history = useHistory();
     const logoff = ()=>{
         window.location.href="/"
     }
