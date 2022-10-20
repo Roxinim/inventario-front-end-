@@ -19,7 +19,7 @@ export default function EnterprisesList(){
     function mostrarlista(){
         api.get('/empresas')
         .then(res=>{
-            if(res.status==200){
+            if(res.status===200){
                 setDados(res.data.empresa);
             } else{console.log("Houve um erro na requisição")}
         })

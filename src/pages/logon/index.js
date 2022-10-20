@@ -1,7 +1,8 @@
-import React,{useEffect, useState} from 'react'
+import React,{ useState} from 'react'
+            // useEffect,
 import './style.css'
 import "../../global.css"
-import {useHistory} from 'react-router-dom'
+// import {useHistory} from 'react-router-dom'
 // import Usuario from '../../server/usuario.json'
 import api from '../../server/api'
 import PropTypes from 'prop-types';
@@ -9,8 +10,10 @@ import PropTypes from 'prop-types';
 export default function Logon(){
                         // {setToken}
     // const history =  useHistory();
-    let [id, setId] = useState('');
-    let [nome, setNome] = useState('');
+    let [id ] = useState('');
+    // setId
+    let [nome ] = useState('');
+    // setNome
     const [email,setEmail] = useState('');
     const [senha,setSenha] = useState('');
     const dados=[{
@@ -20,104 +23,102 @@ export default function Logon(){
         id:id
         }]
              
-    async function loginUser(credentials) {
-        if(email === ""|| senha===""){
-            alert("Preencha os campos necessários!");
-        } else {
-            // return fetch('http://localhost:5000/login', {
-            // method: 'POST',
-            // headers: {
-            //     'Content-Type': 'application/json'
-            // },
-            // body: JSON.stringify(credentials)
-            // })
-            // .then(data => data.json())
-
-            api.post(`/usuarios/logar`,{email:email,senha:senha})
-            .then(res => {
-              if(res.status===200){
-                let resultado=res.data.usuario;
-                    if(resultado.length>0){
-                        return fetch('http://localhost:5000/login', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(credentials)
-                        })
-                        .then(data => data.json())
-                        // window.location.href="/dashboard"
-                    }else{
-                        alert("Digite Email ou Senha validos")
-                    }
+    // async function loginUser(credentials) {
+    //     if(email === ""|| senha===""){
+    //         alert("Preencha os campos necessários!");
+    //     } else {
+    //         api.post(`/usuarios/logar`,{email:email,senha:senha})
+    //         .then(res => {
+    //           if(res.status===200){
+    //             let resultado=res.data.usuario;
+    //                 if(resultado.length>0){
+    //                     return fetch('http://localhost:5000/login', {
+    //                     method: 'POST',
+    //                     headers: {
+    //                         'Content-Type': 'application/json'
+    //                     },
+    //                     body: JSON.stringify(credentials)
+    //                     })
+    //                     .then(data => data.json())
+    //                     // window.location.href="/dashboard"
+    //                 }else{
+    //                     alert("Digite Email ou Senha validos")
+    //                 }
     
-              }else{
-                  console.log("houve um erro na requisição")
-              }
+    //           }else{
+    //               console.log("houve um erro na requisição")
+    //           }
     
-            })  
-            .catch(function (error) {
-              console.log(error);
-            });
-        }
+    //         })  
+    //         .catch(function (error) {
+    //           console.log(error);
+    //         });
+    //         // return fetch('http://localhost:5000/login', {
+    //         // method: 'POST',
+    //         // headers: {
+    //         //     'Content-Type': 'application/json'
+    //         // },
+    //         // body: JSON.stringify(credentials)
+    //         // })
+    //         // .then(data => data.json()) 
+    //     }
+    //     // return fetch('http://localhost:8080/login', {
+    //     // method: 'POST',
+    //     // headers: {
+    //     //     'Content-Type': 'application/json'
+    //     // },
+    //     // body: JSON.stringify(credentials)
+    //     // })
+    //     // .then(data => data.json())
+    // }
+    // const handleSubmit = async e => {
+    //     e.preventDefault();
 
-        // return fetch('http://localhost:8080/login', {
-        // method: 'POST',
-        // headers: {
-        //     'Content-Type': 'application/json'
-        // },
-        // body: JSON.stringify(credentials)
-        // })
-        // .then(data => data.json())
-    }
-    const handleSubmit = async e => {
-        e.preventDefault();
+    //     const token = await loginUser({
+    //       email,
+    //       senha
+    //     });
+    //     // setToken(token);
 
-        const token = await loginUser({
-          email,
-          senha
-        });
-        // setToken(token);
+    //     // console.log(token)
 
-        // console.log(token)
-
-        // if(email === ""|| senha===""){
-        //     alert("Preencha os campos necessários!");
-        // } else {
+    //     // if(email === ""|| senha===""){
+    //     //     alert("Preencha os campos necessários!");
+    //     // } else {
     
-        //     api.post(`/usuarios/logar`,{email:email,senha:senha})
-        //     .then(res => {
-        //       if(res.status===200){
-        //         let resultado=res.data.usuario;
-        //             if(resultado.length>0){
-        //                 const token = await loginUser({
-        //                     email,
-        //                     senha
-        //                 });
-        //                 setToken(token);
-        //                 // return fetch('http://localhost:8080/login', {
-        //                 // method: 'POST',
-        //                 // headers: {
-        //                 //     'Content-Type': 'application/json'
-        //                 // },
-        //                 // body: JSON.stringify(credentials)
-        //                 // })
-        //                 // .then(data => data.json())
-        //                 // window.location.href="/dashboard"
-        //             }else{
-        //                 alert("Digite Email ou Senha validos")
-        //             }
+    //     //     api.post(`/usuarios/logar`,{email:email,senha:senha})
+    //     //     .then(res => {
+    //     //       if(res.status===200){
+    //     //         let resultado=res.data.usuario;
+    //     //             if(resultado.length>0){
+    //     //                 const token = await loginUser({
+    //     //                     email,
+    //     //                     senha
+    //     //                 });
+    //     //                 setToken(token);
+    //     //                 // return fetch('http://localhost:8080/login', {
+    //     //                 // method: 'POST',
+    //     //                 // headers: {
+    //     //                 //     'Content-Type': 'application/json'
+    //     //                 // },
+    //     //                 // body: JSON.stringify(credentials)
+    //     //                 // })
+    //     //                 // .then(data => data.json())
+    //     //                 // window.location.href="/dashboard"
+    //     //             }else{
+    //     //                 alert("Digite Email ou Senha validos")
+    //     //             }
     
-        //       }else{
-        //           console.log("houve um erro na requisição")
-        //       }
+    //     //       }else{
+    //     //           console.log("houve um erro na requisição")
+    //     //       }
     
-        //     })  
-        //     .catch(function (error) {
-        //       console.log(error);
-        //     });
-        // }
-    }  
+    //     //     })  
+    //     //     .catch(function (error) {
+    //     //       console.log(error);
+    //     //     });
+    //     // }
+    // }  
 
     function logar(e){
         e.preventDefault()
@@ -220,6 +221,6 @@ export default function Logon(){
         </div>
     )
 }
-Logon.propTypes = {
-    setToken: PropTypes.func.isRequired
-  };
+// Logon.propTypes = {
+//     setToken: PropTypes.func.isRequired
+//   };

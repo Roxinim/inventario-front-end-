@@ -19,7 +19,7 @@ export default function PatrimonyEdit() {
     function mostrarDados(){
         api.get(`/patrimonios/${id}`)
         .then(res=>{
-            if(res.status==200){
+            if(res.status===200){
                 let resultado=res.data.patrimonio
                 setNome(resultado[0].nome);
             } else{console.log("Houve um erro na requisição")}

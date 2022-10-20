@@ -19,7 +19,7 @@ export default function SectorList(){
     function mostrarlista(){
         api.get('/setores')
         .then(res=>{
-            if(res.status==200){
+            if(res.status===200){
                 setDados(res.data.setor);
             } else{console.log("Houve um erro na requisição")}
         })

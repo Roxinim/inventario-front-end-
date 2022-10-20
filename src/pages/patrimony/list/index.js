@@ -19,7 +19,7 @@ export default function PatrimonyList(){
     function mostrarlista(){
         api.get('/patrimonios')
         .then(res=>{
-            if(res.status==200){
+            if(res.status===200){
                 setDados(res.data.patrimonio);
             } else{console.log("Houve um erro na requisição")}
         })

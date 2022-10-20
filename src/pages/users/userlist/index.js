@@ -28,7 +28,7 @@ export default function UserList(){
         // .then((data)=>setDados(data.usuario))
         api.get('/usuarios')
         .then(res=>{
-            if(res.status==200){
+            if(res.status===200){
                 setDados(res.data.usuario);
             } else{console.log("Houve um erro na requisição")}
         })

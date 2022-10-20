@@ -19,7 +19,7 @@ export default function SectorEdit() {
     function mostrarDados(){
         api.get(`/setores/${id}`)
         .then(res=>{
-            if(res.status==200){
+            if(res.status===200){
                 let resultado=res.data.setor
                 setNome(resultado[0].nome);
             } else{console.log("Houve um erro na requisição")}

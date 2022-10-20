@@ -23,7 +23,7 @@ export default function EnterprisesEdit() {
     function mostrarDados(){
         api.get(`/empresas/${id}`)
         .then(res=>{
-            if(res.status==200){
+            if(res.status===200){
                 let resultado=res.data.empresa
                 setNome(resultado[0].nome);
                 setResponsavel(resultado[0].responsavel);

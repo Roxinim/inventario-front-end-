@@ -56,7 +56,7 @@ export default function Stocking(){
     function mostrarlista(){
         api.get('/lotacao')
         .then(res=>{
-            if(res.status==200){
+            if(res.status===200){
                 setDados(res.data.lotacao);
             } else{console.log("Houve um erro na requisição")}
         })
@@ -76,9 +76,9 @@ export default function Stocking(){
     function formatardata(d){
         var data = new Date(d),
             dia  = data.getDate().toString(),
-            diaF = (dia.length == 1) ? '0'+dia:dia,
+            diaF = (dia.length === 1) ? '0'+dia:dia,
             mes = (data.getMonth()+1).toString(),
-            mesF = (mes.length == 1) ? '0'+mes:mes,
+            mesF = (mes.length === 1) ? '0'+mes:mes,
             anoF = data.getFullYear();
             return diaF+"/"+mesF+"/"+anoF
 
@@ -91,10 +91,14 @@ export default function Stocking(){
               {
                 label: 'Sim',
                 onClick: () =>{
-                    let dadosnovos = []
-                    dadosnovos=dados.filter(item=>item.id!==i)
-                    setDados(dadosnovos)
-                    localStorage.setItem("cd-lotacao",JSON.stringify(dadosnovos))
+                    api.delete(`/lotacao/${i}`)
+                    .then(res=>{});
+                    alert("Dados deletados com sucesso!");
+                    window.location.reload()
+                    // let dadosnovos = []
+                    // dadosnovos=dados.filter(item=>item.id!==i)
+                    // setDados(dadosnovos)
+                    // localStorage.setItem("cd-lotacao",JSON.stringify(dadosnovos))
                 } 
               },
               {
@@ -128,7 +132,7 @@ export default function Stocking(){
                                 <td>{usu.patrimonio}</td>
                                 <td>{usu.setor}</td>
                                 <td>{usu.empresa}</td>
-                                <td>{formatardata(usu.criado_em)}</td>
+                                <td>{formatardata(usu.desde)}</td>
                                 {/* filtrarnome(usu.idusu, 1) 
                                     filtrarnome(usu.idpat, 2) 
                                     filtrarnome(usu.idset, 3) 
